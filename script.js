@@ -310,7 +310,7 @@ function anim() {
     ctx.clearRect(0, 0, w, h);
 
     // Dibujar el texto adicional en la parte superior
-    ctx.font = '20px Verdana'; // Tamaño y fuente del texto
+    ctx.font = '40px Verdana'; // Tamaño y fuente del texto
     ctx.fillStyle = '#ffffff'; // Color blanco para contraste
     ctx.textAlign = 'center'; // Centrar el texto horizontalmente
     ctx.textBaseline = 'middle'; // Centrar el texto verticalmente
