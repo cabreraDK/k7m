@@ -7,7 +7,7 @@ var c = document.getElementById('c'),
     hw = w / 2,
     hh = h / 2,
     opts = {
-        strings: ['FELIZ', 'CUMPLEAÑOS', ' AMOR!'],
+        strings: ['FELICES', '8 MESES', 'MI AMOR!'],
         charSize: 30,
         charSpacing: 35,
         lineHeight: 40,
