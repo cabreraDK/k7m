@@ -1,5 +1,3 @@
-/* BY ENCODEDMABEL */
-
 var c = document.getElementById('c'),
     w = c.width = window.innerWidth,
     h = c.height = window.innerHeight,
