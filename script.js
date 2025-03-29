@@ -7,7 +7,7 @@ var c = document.getElementById('c'),
     hw = w / 2,
     hh = h / 2,
     opts = {
-        strings: ['FELICES', '8 MESES', ' MI AMOR!'],
+        strings: ['FELIZ', 'CUMPLEAÑOS', ' AMOR!'],
         charSize: 30,
         charSpacing: 35,
         lineHeight: 40,
@@ -62,11 +62,10 @@ function Letter(char, x, y) {
     this.dy = +opts.charSize / 2;
     this.fireworkDy = this.y - hh;
     var hue = x / calc.totalWidth * 360;
-    // Cambiamos el color para mayor contraste
-    this.color = 'hsl(hue, 80%, 80%)'.replace('hue', hue); // Más claro
-    this.lightAlphaColor = 'hsla(hue, 80%, 90%, alp)'.replace('hue', hue); // Más claro
-    this.lightColor = 'hsl(hue, 80%, 90%)'.replace('hue', hue); // Más claro
-    this.alphaColor = 'hsla(hue, 80%, 80%, alp)'.replace('hue', hue); // Más claro
+    this.color = 'hsl(hue, 80%, 80%)'.replace('hue', hue);
+    this.lightAlphaColor = 'hsla(hue, 80%, 90%, alp)'.replace('hue', hue);
+    this.lightColor = 'hsl(hue, 80%, 90%)'.replace('hue', hue);
+    this.alphaColor = 'hsla(hue, 80%, 80%, alp)'.replace('hue', hue);
     this.reset();
 }
 
@@ -216,7 +215,8 @@ Letter.prototype.step = function() {
         } else if (this.inflating) {
             ++this.tick;
 
-            var proportion = this.tick            ,x = this.cx = this.x,
+            var proportion = this.tick / this.inflateTime,
+                x = this.cx = this.x,
                 y = this.cy = this.y - this.size * proportion;
 
             ctx.fillStyle = this.alphaColor.replace('alp', proportion);
@@ -309,15 +309,47 @@ function generateBalloonPath(x, y, size) {
 
 function anim() {
     window.requestAnimationFrame(anim);
-    ctx.clearRect(0, 0, w, h); // Canvas transparente
-    ctx.translate(hw, hh);
+    ctx.clearRect(0, 0, w, h);
 
+    // Dibujar el texto adicional en la parte superior
+    ctx.font = '20px Verdana'; // Tamaño y fuente del texto
+    ctx.fillStyle = '#ffffff'; // Color blanco para contraste
+    ctx.textAlign = 'center'; // Centrar el texto horizontalmente
+    ctx.textBaseline = 'middle'; // Centrar el texto verticalmente
+
+    // Dividimos el texto en varias líneas para que no sea demasiado largo
+    const lines = [
+        "Ya no quiero conocer a alguien más.",
+        "Contigo ha terminado la búsqueda,",
+        "te elijo con la tranquilidad de que",
+        "también te elegiré mañana"
+    ];
+
+    // Posición inicial del texto (arriba del centro)
+    const startY = h * 0.1; // 10% desde la parte superior
+    const lineHeight = 30; // Espacio entre líneas
+    ctx.shadowColor = 'black';
+ctx.shadowBlur = 4;
+ctx.shadowOffsetX = 2;
+ctx.shadowOffsetY = 2;
+
+    // Dibujar cada línea
+    for (let i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i], w / 2, startY + i * lineHeight);
+    }
+
+    // Restaurar la fuente para las letras animadas
+    ctx.font = opts.charSize + 'px Verdana';
+    ctx.textAlign = 'left'; // Restaurar alineación
+    ctx.textBaseline = 'alphabetic'; // Restaurar baseline
+
+    // Continuar con la animación de las letras
+    ctx.translate(hw, hh);
     var done = true;
     for (var l = 0; l < letters.length; ++l) {
         letters[l].step();
         if (letters[l].phase !== 'done') done = false;
     }
-
     ctx.translate(-hw, -hh);
 
     if (done) for (var l = 0; l < letters.length; ++l) letters[l].reset();
